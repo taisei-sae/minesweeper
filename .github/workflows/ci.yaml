@@ -24,7 +24,7 @@ jobs:
             cd /usr/src/googletest/googletest
             sudo cmake .
             sudo make
-            sudo cp lib/libtest*.a /usr/lib
+            sudo cp lib/libgtest*.a /usr/lib
 
         - name: Configure CMake
           run: cmake -B build
