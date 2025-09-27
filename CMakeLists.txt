@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
-add_executable(Minesweeper main.cpp)
+add_executable(Minesweeper src/main.cpp)
 
 target_link_libraries(Minesweeper
     PRIVATE
