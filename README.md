@@ -7,7 +7,7 @@ A game, you know.
 ### Prerequisites
 - Ubuntu 24.04LTS
 - VSCode (C/C++ Extention Pack)
-- and libraries below:
+- and libraries:
 ```bash
 sudo apt install -y build-essential cmake libglfw3-dev libglew-dev libgtest-dev
 ```
