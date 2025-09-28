@@ -28,5 +28,10 @@ int main()
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
+        glfwSwapBuffers(window);
+
+        // Process window event (like key inputs) here
+        glfwPollEvents();
     }
+    glfwTerminate();
 }
