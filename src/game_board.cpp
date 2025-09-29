@@ -1,3 +1,7 @@
-#include "src/game_board.hpp"
+#include "src/game_board.h"
 
-bool GameBoard::isGameWon() { return this->cells_reft = 0; }
+GameBoard::GameBoard(Difficulty difficulty) {
+  GameSettings settings = getSettings(difficulty);
+}
+
+bool GameBoard::isGameWon() { return this->cells_reft == 0; }
