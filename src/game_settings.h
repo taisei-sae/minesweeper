@@ -1,11 +1,15 @@
+#ifndef GAME_SETTINGS_H_
+#define GAME_SETTINGS_H_
+
 enum class Difficulty { Easy, Normal, Hard };
 
 struct GameSettings {
-  unsigned int rows, columns;
+  unsigned int rows;
+  unsigned int columns;
   unsigned int bombs;
 };
 
-static GameSettings getSettings(Difficulty difficulty) {
+static GameSettings get_settings(Difficulty difficulty) {
   switch (difficulty) {
     case Difficulty::Easy:
       return GameSettings{9, 9, 10};
@@ -17,3 +21,5 @@ static GameSettings getSettings(Difficulty difficulty) {
       return GameSettings{16, 16, 25};
   }
 }
+
+#endif

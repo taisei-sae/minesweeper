@@ -13,9 +13,11 @@ sudo apt install -y build-essential cmake libglfw3-dev libglew-dev libgtest-dev
 ```
 ### Coding Rules
 #### Style
-Uses *Google C++ Style Guide*
+Basically ses *Google C++ Style Guide*
 [https://google.github.io/styleguide/cppguide.html](https://google.github.io/styleguide/cppguide.html) 
+
 #### Naming
 - file - snake_case
 - struct/class - PascalCase
-- functions/methods - camelCase
+- functions/methods - snake_case
+- variables - snake_case (data member must have "_" at the end of its name)
