@@ -13,9 +13,9 @@ class GameBoard {
 
  private:
   GameSettings settings_;
-  std::vector<Cell> grid_;
+  std::vector<Cell> cells_;
 
-  void deploy_bombs();
+  void deploy_bombs_and_counts();
 };
 
 #endif

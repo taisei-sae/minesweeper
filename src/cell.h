@@ -12,6 +12,7 @@ class Cell {
   void set_bomb();
   unsigned int get_bomb_count();
   void set_count(unsigned int i);
+  void increment_count();
 
  private:
   bool is_open_;
