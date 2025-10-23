@@ -3,9 +3,20 @@
 #include <cstdlib>
 
 GameBoard::GameBoard(const Difficulty difficulty) {
+  game_state_ = GameState::Playing;
   settings_ = get_settings(difficulty);
+
   // Initialize cells with default constructor
   cells_.resize(settings_.rows * settings_.columns);
+  // and put bombs and counts
+  deploy_bombs_and_counts();
+}
+
+GameState GameBoard::get_game_state() { return game_state_; }
+
+bool GameBoard::is_valid_point(unsigned int row, unsigned int column) {
+  return (row >= 0 && row < settings_.rows && column >= 0 &&
+          column < settings_.columns);
 }
 
 void GameBoard::deploy_bombs_and_counts() {
@@ -26,12 +37,23 @@ void GameBoard::deploy_bombs_and_counts() {
       for (const auto& dir : directions) {
         int new_row = static_cast<int>(row) + dir[0];
         int new_col = static_cast<int>(col) + dir[1];
-        if (new_row >= 0 && new_row < static_cast<int>(settings_.rows) &&
-            new_col >= 0 && new_col < static_cast<int>(settings_.columns)) {
+        if (is_valid_point(new_row, new_col)) {
           unsigned int neighbor_index = new_row * settings_.columns + new_col;
           cells_[neighbor_index].increment_count();
         }
       }
     }
   }
+}
+
+void GameBoard::open_cell_recursive(unsigned int row, unsigned int column) {
+  unsigned int index = settings_.columns * row + column;
+  cells_[index].open();
+
+  // Check id the cell is vacant
+  if (cells_[index].has_bomb() || cells_[index].get_bomb_count() > 0) {
+    return;
+  }
+
+  // TODO: Search for adjacent vacant cells
 }

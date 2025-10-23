@@ -16,6 +16,7 @@ find_package(GTest CONFIG REQUIRED)
 add_executable(Minesweeper
     src/main.cpp
     src/game_board.cpp
+    src/cell.cpp
 )
 
 target_include_directories(Minesweeper PUBLIC src)
@@ -32,6 +33,7 @@ target_link_libraries(Minesweeper
 add_executable(Minesweeper_Tests
     # src/tests/test_board_logic.cpp
     src/game_board.cpp
+    src/cell.cpp
 )
 
 target_link_libraries(Minesweeper_Tests
