@@ -22,4 +22,4 @@ static GameSettings get_settings(Difficulty difficulty) {
   }
 }
 
-#endif
+#endif  // GAME_SETTINGS_H_

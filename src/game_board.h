@@ -37,4 +37,4 @@ class GameBoard {
   void open_cell_recursive(unsigned int row, unsigned int column);
 };
 
-#endif
+#endif  // GAME_BOARD_H_

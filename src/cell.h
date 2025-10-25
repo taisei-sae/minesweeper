@@ -3,7 +3,7 @@
 
 class Cell {
  public:
-  //  default constructor
+  // default constructor
   Cell() : is_open_(false), has_bomb_(false), bomb_count_(0) {};
 
   bool is_open() const;

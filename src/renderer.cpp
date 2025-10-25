@@ -130,8 +130,8 @@ void Renderer::render(const GameBoard& board) {
   unsigned int rows = board.get_rows();
   unsigned int cols = board.get_columns();
 
-  float cellWidth = 2.0f / cols;  // Normalized device coordinates (-1 to 1)
-  float cellHeight = 2.0f / rows;
+  float cell_width = 2.0f / cols;  // Normalized device coordinates (-1 to 1)
+  float cell_height = 2.0f / rows;
   float padding = 0.02f;  // Small gap between cells
 
   for (unsigned int row = 0; row < rows; ++row) {
@@ -143,10 +143,10 @@ void Renderer::render(const GameBoard& board) {
       get_cell_color(cell, r, g, b);
 
       // Calculate cell position (top-left origin, y increases downward)
-      float x1 = -1.0f + col * cellWidth + padding;
-      float y1 = 1.0f - row * cellHeight - padding;
-      float x2 = x1 + cellWidth - 2 * padding;
-      float y2 = y1 - cellHeight + 2 * padding;
+      float x1 = -1.0f + col * cell_width + padding;
+      float y1 = 1.0f - row * cell_height - padding;
+      float x2 = x1 + cell_width - 2 * padding;
+      float y2 = y1 - cell_height + 2 * padding;
 
       // Two triangles to make a rectangle
       // Triangle 1
