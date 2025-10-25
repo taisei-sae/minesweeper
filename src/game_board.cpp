@@ -1,6 +1,6 @@
 #include "game_board.h"
 
-#include <cstdlib>
+#include <random>
 
 GameBoard::GameBoard(const Difficulty difficulty) {
   game_state_ = GameState::Playing;
@@ -23,10 +23,15 @@ void GameBoard::deploy_bombs_and_counts() {
   const int directions[8][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
                                 {0, 1},   {1, -1}, {1, 0},  {1, 1}};
 
+  // Use modern C++ random number generation
+  std::random_device rd;   // Non-deterministic random seed
+  std::mt19937 gen(rd());  // Mersenne Twister engine
+  std::uniform_int_distribution<unsigned int> dist(0, cells_.size() - 1);
+
   unsigned int bombs_count = 0;
   while (bombs_count < settings_.bombs) {
     // Deploy bomb at random index
-    unsigned int index = rand() % cells_.size();
+    unsigned int index = dist(gen);
     if (!cells_[index].has_bomb()) {
       cells_[index].set_bomb();
       bombs_count++;
@@ -47,13 +52,5 @@ void GameBoard::deploy_bombs_and_counts() {
 }
 
 void GameBoard::open_cell_recursive(unsigned int row, unsigned int column) {
-  unsigned int index = settings_.columns * row + column;
-  cells_[index].open();
-
-  // Check id the cell is vacant
-  if (cells_[index].has_bomb() || cells_[index].get_bomb_count() > 0) {
-    return;
-  }
-
   // TODO: Search for adjacent vacant cells
 }

@@ -6,11 +6,11 @@ class Cell {
   //  default constructor
   Cell() : is_open_(false), has_bomb_(false), bomb_count_(0) {};
 
-  bool is_open();
+  bool is_open() const;
   void open();
-  bool has_bomb();
+  bool has_bomb() const;
   void set_bomb();
-  unsigned int get_bomb_count();
+  unsigned int get_bomb_count() const;
   void set_count(unsigned int i);
   void increment_count();
 

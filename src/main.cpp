@@ -1,40 +1,63 @@
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <game_board.h>
 
 #include <iostream>
 
+#include "game_board.h"
+#include "renderer.h"
+
 int main() {
-  // Initialization
+  // 1. Initialize GLFW
   if (!glfwInit()) {
     std::cerr << "Failed to initialize GLFW" << std::endl;
     return -1;
   }
 
-  // Create a window
+  // 2. Create a window
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  GLFWwindow *window = glfwCreateWindow(800, 600, "MineSweeper", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(800, 800, "MineSweeper", NULL, NULL);
   if (!window) {
     std::cerr << "Failed to create window" << std::endl;
     glfwTerminate();
     return -1;
   }
 
-  // activate an GLFW context of the created window in this thread
+  // Activate OpenGL context
   glfwMakeContextCurrent(window);
 
-  GameBoard board = GameBoard{Difficulty::Easy};
+  // 3. Initialize GLEW
+  glewExperimental = GL_TRUE;
+  if (glewInit() != GLEW_OK) {
+    std::cerr << "Failed to initialize GLEW" << std::endl;
+    glfwTerminate();
+    return -1;
+  }
 
-  // Main loop
+  // 4. Create game board and renderer
+  GameBoard board{Difficulty::Normal};
+  Renderer renderer;
+  if (!renderer.initialize()) {
+    std::cerr << "Failed to initialize renderer" << std::endl;
+    glfwTerminate();
+    return -1;
+  }
+
+  // 5. Main loop
   while (!glfwWindowShouldClose(window)) {
+    // Render the game board
+    renderer.render(board);
+
+    // Swap buffers
     glfwSwapBuffers(window);
 
-    // Process window event (like key inputs) here
+    // Process events
     glfwPollEvents();
   }
 
-  // Termination
+  // 6. Cleanup
+  renderer.cleanup();
   glfwTerminate();
   return 0;
 }

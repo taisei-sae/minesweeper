@@ -20,6 +20,13 @@ class GameBoard {
   /// Returns true if the game should continue, false if game over
   bool open_cell(unsigned int row, unsigned int column);
 
+  /// Getters for rendering
+  unsigned int get_rows() const { return settings_.rows; }
+  unsigned int get_columns() const { return settings_.columns; }
+  const Cell& get_cell(unsigned int row, unsigned int col) const {
+    return cells_[row * settings_.columns + col];
+  }
+
  private:
   GameState game_state_;
   GameSettings settings_;
