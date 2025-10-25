@@ -18,6 +18,7 @@ add_executable(Minesweeper
     src/game_board.cpp
     src/cell.cpp
     src/renderer.cpp
+    src/input_handler.cpp
 )
 
 target_include_directories(Minesweeper PUBLIC src)

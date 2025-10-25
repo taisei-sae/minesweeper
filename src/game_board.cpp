@@ -51,6 +51,72 @@ void GameBoard::deploy_bombs_and_counts() {
   }
 }
 
+bool GameBoard::open_cell(unsigned int row, unsigned int column) {
+  // Check if game is already over
+  if (game_state_ != GameState::Playing) {
+    return false;
+  }
+
+  // Check if position is valid
+  if (!is_valid_point(row, column)) {
+    return true;  // Invalid click, but game continues
+  }
+
+  unsigned int index = row * settings_.columns + column;
+  Cell& cell = cells_[index];
+
+  // Check if cell is already open
+  if (cell.is_open()) {
+    return true;  // Already open, nothing to do
+  }
+
+  // Open the cell
+  cell.open();
+
+  // Check if it's a bomb
+  if (cell.has_bomb()) {
+    game_state_ = GameState::GameOver;
+    return false;  // Game over!
+  }
+
+  // If cell has no adjacent bombs, recursively open neighbors
+  if (cell.get_bomb_count() == 0) {
+    open_cell_recursive(row, column);
+  }
+
+  // TODO: Check if game is cleared (all non-bomb cells are open)
+
+  return true;  // Game continues
+}
+
 void GameBoard::open_cell_recursive(unsigned int row, unsigned int column) {
-  // TODO: Search for adjacent vacant cells
+  // Directions: 8 adjacent cells
+  const int directions[8][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
+                                {0, 1},   {1, -1}, {1, 0},  {1, 1}};
+
+  for (const auto& dir : directions) {
+    int new_row = static_cast<int>(row) + dir[0];
+    int new_col = static_cast<int>(column) + dir[1];
+
+    // Check if position is valid
+    if (!is_valid_point(new_row, new_col)) {
+      continue;
+    }
+
+    unsigned int index = new_row * settings_.columns + new_col;
+    Cell& cell = cells_[index];
+
+    // Skip if already open or has bomb
+    if (cell.is_open() || cell.has_bomb()) {
+      continue;
+    }
+
+    // Open the cell
+    cell.open();
+
+    // If this cell also has no adjacent bombs, recursively open its neighbors
+    if (cell.get_bomb_count() == 0) {
+      open_cell_recursive(new_row, new_col);
+    }
+  }
 }

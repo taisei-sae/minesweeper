@@ -97,6 +97,15 @@ bool Renderer::setup_shaders() {
 
 void Renderer::get_cell_color(const Cell& cell, float& r, float& g,
                               float& b) const {
+  // If cell is not open, show as dark gray (unopened)
+  if (!cell.is_open()) {
+    r = 0.3f;
+    g = 0.3f;
+    b = 0.3f;
+    return;
+  }
+
+  // Cell is open - show its content
   if (cell.has_bomb()) {
     // Red for bombs
     r = 1.0f;
@@ -106,9 +115,9 @@ void Renderer::get_cell_color(const Cell& cell, float& r, float& g,
     unsigned int count = cell.get_bomb_count();
     if (count == 0) {
       // Light gray for zero
-      r = 0.8f;
-      g = 0.8f;
-      b = 0.8f;
+      r = 0.9f;
+      g = 0.9f;
+      b = 0.9f;
     } else {
       // Color gradient based on bomb count (1-8)
       // Blue (1) -> Green (2-3) -> Yellow (4-5) -> Orange (6-7) -> Red (8)
@@ -148,8 +157,10 @@ void Renderer::render(const GameBoard& board) {
       float x2 = x1 + cell_width - 2 * padding;
       float y2 = y1 - cell_height + 2 * padding;
 
+      // We don't use Triangle Strips for simplicity
+      //
       // Two triangles to make a rectangle
-      // Triangle 1
+      // Triangle 1: Top-left -> Top-right -> Bottom-left
       vertices.push_back(x1);
       vertices.push_back(y1);  // Top-left
       vertices.push_back(r);
@@ -168,7 +179,7 @@ void Renderer::render(const GameBoard& board) {
       vertices.push_back(g);
       vertices.push_back(b);
 
-      // Triangle 2
+      // Triangle 2: Top-right -> Bottom-right -> Bottom-left
       vertices.push_back(x2);
       vertices.push_back(y1);  // Top-right
       vertices.push_back(r);

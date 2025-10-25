@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "game_board.h"
+#include "input_handler.h"
 #include "renderer.h"
 
 int main() {
@@ -35,14 +36,17 @@ int main() {
     return -1;
   }
 
-  // 4. Create game board and renderer
-  GameBoard board{Difficulty::Normal};
+  // 4. Create game board, renderer, and input handler
+  GameBoard board{Difficulty::Easy};
   Renderer renderer;
   if (!renderer.initialize()) {
     std::cerr << "Failed to initialize renderer" << std::endl;
     glfwTerminate();
     return -1;
   }
+
+  InputHandler input_handler(window, &board);
+  input_handler.setup_callbacks();
 
   // 5. Main loop
   while (!glfwWindowShouldClose(window)) {

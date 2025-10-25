@@ -16,7 +16,7 @@ class GameBoard {
   /// Get the current game state
   GameState get_game_state();
 
-  /// Click and open a cell at (row, column)
+  /// Left click and open a cell at (row, column)
   /// Returns true if the game should continue, false if game over
   bool open_cell(unsigned int row, unsigned int column);
 
