@@ -15,7 +15,7 @@ sudo apt install -y build-essential cmake libglfw3-dev libglew-dev libgtest-dev
 At project root,
 ```bash
 ./build.sh # build
-./build/MineSweeper # Run
+./build/Minesweeper # Run
 ```
 ### Coding Rules
 #### Style
