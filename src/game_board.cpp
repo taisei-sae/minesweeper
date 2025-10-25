@@ -12,7 +12,7 @@ GameBoard::GameBoard(const Difficulty difficulty) {
   deploy_bombs_and_counts();
 }
 
-GameState GameBoard::get_game_state() { return game_state_; }
+GameState GameBoard::get_game_state() const { return game_state_; }
 
 bool GameBoard::is_valid_point(unsigned int row, unsigned int column) {
   return (row >= 0 && row < settings_.rows && column >= 0 &&

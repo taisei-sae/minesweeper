@@ -49,8 +49,22 @@ std::tuple<unsigned int, unsigned int> InputHandler::get_clicked_cell() {
   unsigned int rows = board_->get_rows();
   unsigned int cols = board_->get_columns();
 
+  // Account for console bar at the top (60px height)
+  const float console_height = 60.0f;
+
+  // Subtract console bar height from y position
+  double adjusted_ypos = ypos - console_height;
+
+  // If click is in the console bar area, return invalid coordinates
+  if (adjusted_ypos < 0) {
+    return std::make_tuple(rows, cols);  // Invalid cell coordinates
+  }
+
+  // Calculate available height for game board
+  double board_height = height - console_height;
+
   unsigned int col = static_cast<unsigned int>((xpos / width) * cols);
-  unsigned int row = static_cast<unsigned int>((ypos / height) * rows);
+  unsigned int row = static_cast<unsigned int>((adjusted_ypos / board_height) * rows);
 
   return std::make_tuple(row, col);
 }
@@ -60,6 +74,11 @@ void InputHandler::handle_mouse_button(int button, int action, int mods) {
     // Get mouse position
     unsigned int row, col;
     std::tie(row, col) = get_clicked_cell();
+
+    // Check if click is within valid board area
+    if (row >= board_->get_rows() || col >= board_->get_columns()) {
+      return;  // Click outside board area (e.g., in console bar)
+    }
 
     // Open the cell
     bool game_continues = board_->open_cell(row, col);
@@ -75,6 +94,12 @@ void InputHandler::handle_mouse_button(int button, int action, int mods) {
     // Right-click handling (e.g., flagging a cell) can be added here
     unsigned int row, col;
     std::tie(row, col) = get_clicked_cell();
+
+    // Check if click is within valid board area
+    if (row >= board_->get_rows() || col >= board_->get_columns()) {
+      return;  // Click outside board area (e.g., in console bar)
+    }
+
     board_->toggle_flag(row, col);
   }
 }

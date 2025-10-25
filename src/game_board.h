@@ -14,7 +14,7 @@ class GameBoard {
   GameBoard(Difficulty difficulty);
 
   // Get the current game state
-  GameState get_game_state();
+  GameState get_game_state() const;
 
   // Left click and open a cell at (row, column)
   // Returns true if the game should continue, false if game over

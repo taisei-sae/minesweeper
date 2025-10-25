@@ -28,7 +28,8 @@ void main() {
 }
 )";
 
-Renderer::Renderer() : shader_program_(0), vao_(0), vbo_(0) {}
+Renderer::Renderer(GLFWwindow* window)
+    : window_(window), shader_program_(0), vao_(0), vbo_(0) {}
 
 Renderer::~Renderer() { cleanup(); }
 
@@ -142,13 +143,23 @@ void Renderer::render(const GameBoard& board) {
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  // Get window dimensions to calculate console bar offset
+  int display_w, display_h;
+  glfwGetFramebufferSize(window_, &display_w, &display_h);
+  const float console_height = 60.0f;  // Same as UIManager console bar height
+
+  // Calculate the vertical offset in normalized coordinates
+  // The game board should start below the console bar
+  float console_height_ndc = (console_height / display_h) * 2.0f;  // Convert to NDC (-1 to 1 range)
+  float board_vertical_size = 2.0f - console_height_ndc;  // Remaining vertical space for board
+
   // Generate vertices for all cells
   std::vector<float> vertices;
   unsigned int rows = board.get_rows();
   unsigned int cols = board.get_columns();
 
   float cell_width = 2.0f / cols;  // Normalized device coordinates (-1 to 1)
-  float cell_height = 2.0f / rows;
+  float cell_height = board_vertical_size / rows;  // Use only the remaining vertical space
   float padding = 0.02f;  // Small gap between cells
 
   for (unsigned int row = 0; row < rows; ++row) {
@@ -160,8 +171,9 @@ void Renderer::render(const GameBoard& board) {
       get_cell_color(cell, r, g, b);
 
       // Calculate cell position (top-left origin, y increases downward)
+      // Start from below the console bar (1.0 - console_height_ndc)
       float x1 = -1.0f + col * cell_width + padding;
-      float y1 = 1.0f - row * cell_height - padding;
+      float y1 = 1.0f - console_height_ndc - row * cell_height - padding;
       float x2 = x1 + cell_width - 2 * padding;
       float y2 = y1 - cell_height + 2 * padding;
 

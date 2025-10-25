@@ -1,0 +1,73 @@
+#include "ui_manager.h"
+
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+
+UIManager::UIManager(GLFWwindow* window) : window_(window) {}
+
+UIManager::~UIManager() { cleanup(); }
+
+bool UIManager::initialize() {
+  // Setup Dear ImGui context
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO& io = ImGui::GetIO();
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+  // Setup Dear ImGui style
+  ImGui::StyleColorsDark();
+
+  // Setup Platform/Renderer backends
+  ImGui_ImplGlfw_InitForOpenGL(window_, true);
+  ImGui_ImplOpenGL3_Init("#version 330");
+
+  return true;
+}
+
+void UIManager::render(const GameBoard& board) {
+  // Start the Dear ImGui frame
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+
+  // Get window size
+  int display_w, display_h;
+  glfwGetFramebufferSize(window_, &display_w, &display_h);
+
+  // Create console bar at the top (full width, fixed height)
+  const float console_height = 60.0f;
+  ImGui::SetNextWindowPos(ImVec2(0, 0));
+  ImGui::SetNextWindowSize(ImVec2((float)display_w, console_height));
+  ImGui::Begin("Console", nullptr,
+               ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+                   ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+
+  // Display game status message
+  GameState state = board.get_game_state();
+  if (state == GameState::Playing) {
+    ImGui::Text("Press 'R' to restart | Left Click: Open | Right Click: Flag");
+  } else if (state == GameState::GameOver) {
+    ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
+                       "GAME OVER! You hit a bomb!");
+    ImGui::SameLine();
+    ImGui::Text("| Press 'R' to restart");
+  } else if (state == GameState::Cleared) {
+    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+                       "CLEARED! Congratulations!");
+    ImGui::SameLine();
+    ImGui::Text("| Press 'R' to restart");
+  }
+
+  ImGui::End();
+
+  // Rendering
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void UIManager::cleanup() {
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+}

@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLFW REQUIRED glfw3)
+pkg_check_modules(IMGUI REQUIRED imgui)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GTest CONFIG REQUIRED)
@@ -19,15 +20,19 @@ add_executable(Minesweeper
     src/cell.cpp
     src/renderer.cpp
     src/input_handler.cpp
+    src/ui_manager.cpp
 )
 
 target_include_directories(Minesweeper PUBLIC src)
+
+target_include_directories(Minesweeper PRIVATE ${IMGUI_INCLUDE_DIRS})
 
 target_link_libraries(Minesweeper
     PRIVATE
         ${OPENGL_LIBRARIES}
         GLEW::GLEW
         ${GLFW_LIBRARIES}
+        ${IMGUI_LIBRARIES}
 )
 
 

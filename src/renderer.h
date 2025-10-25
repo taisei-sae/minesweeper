@@ -8,7 +8,7 @@
 
 class Renderer {
  public:
-  Renderer();
+  Renderer(GLFWwindow* window);
   ~Renderer();
 
   // Initialize OpenGL resources (shaders, buffers)
@@ -21,6 +21,7 @@ class Renderer {
   void cleanup();
 
  private:
+  GLFWwindow* window_;
   unsigned int shader_program_;
   unsigned int vao_;
   unsigned int vbo_;
