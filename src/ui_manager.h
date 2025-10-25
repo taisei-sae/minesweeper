@@ -5,6 +5,8 @@
 
 #include "game_board.h"
 
+struct ImFont;  // Forward declaration
+
 class UIManager {
  public:
   UIManager(GLFWwindow* window);
@@ -22,6 +24,7 @@ class UIManager {
  private:
   GLFWwindow* window_;
   bool initialized_;
+  ImFont* large_font_;  // Large font for game overlay numbers
 
   // Render numbers and symbols overlay on game board
   void render_game_overlay(const GameBoard& board, int display_w,

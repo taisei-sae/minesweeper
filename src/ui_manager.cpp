@@ -9,7 +9,7 @@
 #include "game_settings.h"
 
 UIManager::UIManager(GLFWwindow* window)
-    : window_(window), initialized_(false) {}
+    : window_(window), initialized_(false), large_font_(nullptr) {}
 
 UIManager::~UIManager() { cleanup(); }
 
@@ -23,6 +23,17 @@ bool UIManager::initialize() {
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO();
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+  // Load default font first (for UI console)
+  io.Fonts->AddFontDefault();
+
+  // Load custom font with larger size for game overlay
+  // DejaVu Sans Bold is a high-quality font available on Ubuntu
+  const char* font_path =
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf";
+  large_font_ = io.Fonts->AddFontFromFileTTF(
+      font_path, 48.0f);  // Load at 48pt for high quality
+  io.Fonts->Build();
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
@@ -113,6 +124,10 @@ void UIManager::render_game_overlay(const GameBoard& board, int display_w,
 
   ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
+  // Use custom loaded font for numbers - scale based on cell size
+  ImFont* font = large_font_ ? large_font_ : ImGui::GetFont();
+  float font_size = cell_height * 0.6f;  // Use 60% of cell height for font size
+
   for (unsigned int row = 0; row < rows; ++row) {
     for (unsigned int col = 0; col < cols; ++col) {
       const Cell& cell = board.get_cell(row, col);
@@ -127,9 +142,10 @@ void UIManager::render_game_overlay(const GameBoard& board, int display_w,
           UIConfig::kConsoleBarHeight + row * cell_height + cell_height / 2.0f;
 
       if (cell.has_bomb()) {
-        // Draw bomb symbol
-        draw_list->AddText(ImVec2(x - 10, y - 10), IM_COL32(255, 0, 0, 255),
-                           "B");
+        // Draw bomb symbol with larger font
+        draw_list->AddText(font, font_size,
+                           ImVec2(x - font_size * 0.3f, y - font_size * 0.5f),
+                           IM_COL32(255, 0, 0, 255), "B");
       } else if (cell.get_bomb_count() > 0) {
         // Draw number
         char num_str[2];
@@ -166,7 +182,9 @@ void UIManager::render_game_overlay(const GameBoard& board, int display_w,
             color = IM_COL32(0, 0, 0, 255);
         }
 
-        draw_list->AddText(ImVec2(x - 5, y - 10), color, num_str);
+        draw_list->AddText(font, font_size,
+                           ImVec2(x - font_size * 0.3f, y - font_size * 0.5f),
+                           color, num_str);
       }
     }
   }
