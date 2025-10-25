@@ -4,10 +4,12 @@
 class Cell {
  public:
   // default constructor
-  Cell() : is_open_(false), has_bomb_(false), bomb_count_(0) {};
+  Cell() : is_open_(false), has_flag_(false), has_bomb_(false), bomb_count_(0) {};
 
   bool is_open() const;
   void open();
+  bool has_flag() const;
+  void toggle_flag();
   bool has_bomb() const;
   void set_bomb();
   unsigned int get_bomb_count() const;
@@ -16,6 +18,7 @@ class Cell {
 
  private:
   bool is_open_;
+  bool has_flag_;
   bool has_bomb_;
   unsigned int bomb_count_;
 };

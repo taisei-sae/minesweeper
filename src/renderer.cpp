@@ -97,11 +97,19 @@ bool Renderer::setup_shaders() {
 
 void Renderer::get_cell_color(const Cell& cell, float& r, float& g,
                               float& b) const {
-  // If cell is not open, show as dark gray (unopened)
+  // If cell is not open
   if (!cell.is_open()) {
-    r = 0.3f;
-    g = 0.3f;
-    b = 0.3f;
+    // Show flag as orange if flagged
+    if (cell.has_flag()) {
+      r = 1.0f;
+      g = 0.6f;
+      b = 0.0f;
+    } else {
+      // Dark gray for unopened cells
+      r = 0.3f;
+      g = 0.3f;
+      b = 0.3f;
+    }
     return;
   }
 

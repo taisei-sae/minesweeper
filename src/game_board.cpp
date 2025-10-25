@@ -70,6 +70,11 @@ bool GameBoard::open_cell(unsigned int row, unsigned int column) {
     return true;  // Already open, nothing to do
   }
 
+  // Check if cell has a flag (cannot open flagged cells)
+  if (cell.has_flag()) {
+    return true;  // Flagged, don't open
+  }
+
   // Open the cell
   cell.open();
 
@@ -119,4 +124,17 @@ void GameBoard::open_cell_recursive(unsigned int row, unsigned int column) {
       open_cell_recursive(new_row, new_col);
     }
   }
+}
+
+void GameBoard::toggle_flag(unsigned int row, unsigned int column) {
+  // Check if position is valid
+  if (!is_valid_point(row, column)) {
+    return;  // Invalid position
+  }
+
+  unsigned int index = row * settings_.columns + column;
+  Cell& cell = cells_[index];
+
+  // Toggle the flag on the cell
+  cell.toggle_flag();
 }

@@ -4,6 +4,10 @@ bool Cell::is_open() const { return is_open_; }
 
 void Cell::open() { is_open_ = true; }
 
+bool Cell::has_flag() const { return has_flag_; }
+
+void Cell::toggle_flag() { has_flag_ = !has_flag_; }
+
 bool Cell::has_bomb() const { return has_bomb_; }
 
 void Cell::set_bomb() { has_bomb_ = true; }

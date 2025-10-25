@@ -3,6 +3,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <tuple>
+
 #include "game_board.h"
 
 class InputHandler {
@@ -19,7 +21,10 @@ class InputHandler {
 
   // Static callback functions (required by GLFW C API)
   static void mouse_button_callback(GLFWwindow* window, int button, int action,
-                                     int mods);
+                                    int mods);
+
+  // Instance method to get clicked cell coordinates
+  std::tuple<unsigned int, unsigned int> get_clicked_cell();
 
   // Instance method for handling mouse button events
   void handle_mouse_button(int button, int action, int mods);
