@@ -16,9 +16,9 @@ A classic Minesweeper game implemented in C++ with OpenGL.
 - **Left Click**: Open a cell
 - **Right Click**: Toggle flag on a cell
 - **R Key**: Restart the current game
-- **1 Key**: Switch to Easy difficulty (9x9, 10 bombs)
-- **2 Key**: Switch to Normal difficulty (16x16, 25 bombs)
-- **3 Key**: Switch to Hard difficulty (25x25, 60 bombs)
+- **1 Key**: Switch to Easy difficulty
+- **2 Key**: Switch to Normal difficulty
+- **3 Key**: Switch to Hard difficulty
 
 ## For Developpers (It's me! Just in case that I forget)
 
