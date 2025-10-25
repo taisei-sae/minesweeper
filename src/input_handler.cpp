@@ -16,6 +16,7 @@ void InputHandler::setup_callbacks() {
 
   // Set GLFW callbacks
   glfwSetMouseButtonCallback(window_, mouse_button_callback);
+  glfwSetKeyCallback(window_, key_callback);
 }
 
 void InputHandler::mouse_button_callback(GLFWwindow* window, int button,
@@ -25,6 +26,16 @@ void InputHandler::mouse_button_callback(GLFWwindow* window, int button,
       static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
   if (handler) {
     handler->handle_mouse_button(button, action, mods);
+  }
+}
+
+void InputHandler::key_callback(GLFWwindow* window, int key, int scancode,
+                                int action, int mods) {
+  // Get InputHandler instance from window user pointer
+  InputHandler* handler =
+      static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+  if (handler) {
+    handler->handle_key(key, scancode, action, mods);
   }
 }
 
@@ -65,5 +76,13 @@ void InputHandler::handle_mouse_button(int button, int action, int mods) {
     unsigned int row, col;
     std::tie(row, col) = get_clicked_cell();
     board_->toggle_flag(row, col);
+  }
+}
+
+void InputHandler::handle_key(int key, int scancode, int action, int mods) {
+  // Press 'R' to restart the game
+  if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+    board_->reset();
+    std::cout << "Game restarted! Press 'R' to restart again." << std::endl;
   }
 }

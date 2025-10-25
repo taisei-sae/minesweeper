@@ -23,6 +23,9 @@ class GameBoard {
   // Right click to toggle flag on a cell at (row, column)
   void toggle_flag(unsigned int row, unsigned int column);
 
+  // Reset the game (restart)
+  void reset();
+
   // Getters for rendering
   unsigned int get_rows() const { return settings_.rows; }
   unsigned int get_columns() const { return settings_.columns; }

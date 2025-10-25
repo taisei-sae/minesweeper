@@ -153,3 +153,15 @@ bool GameBoard::check_game_cleared() {
   // All non-bomb cells are open
   return true;
 }
+
+void GameBoard::reset() {
+  // Reset game state
+  game_state_ = GameState::Playing;
+
+  // Clear all cells (resize will call default constructor)
+  cells_.clear();
+  cells_.resize(settings_.rows * settings_.columns);
+
+  // Deploy new bombs and recalculate counts
+  deploy_bombs_and_counts();
+}
