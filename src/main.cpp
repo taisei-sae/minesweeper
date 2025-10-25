@@ -39,7 +39,7 @@ int main() {
   }
 
   // 4. Create game board, renderer, UI manager, and input handler
-  GameBoard board{Difficulty::Easy};
+  GameBoard board = GameBoard();
 
   Renderer renderer(window);
   if (!renderer.initialize()) {

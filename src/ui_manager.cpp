@@ -53,6 +53,20 @@ void UIManager::render(const GameBoard& board) {
 
   // Display game status message
   GameState state = board.get_game_state();
+
+  // Display difficulty information
+  Difficulty difficulty = board.get_difficulty();
+  const char* diff_name = "Unknown";
+  if (difficulty == Difficulty::Easy) {
+    diff_name = "Easy";
+  } else if (difficulty == Difficulty::Normal) {
+    diff_name = "Normal";
+  } else if (difficulty == Difficulty::Hard) {
+    diff_name = "Hard";
+  }
+
+  ImGui::Text("Difficulty: %s | 1: Easy | 2: Normal | 3: Hard", diff_name);
+
   if (state == GameState::Playing) {
     ImGui::Text("Press 'R' to restart | Left Click: Open | Right Click: Flag");
   } else if (state == GameState::GameOver) {

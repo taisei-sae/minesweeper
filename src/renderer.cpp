@@ -151,8 +151,10 @@ void Renderer::render(const GameBoard& board) {
 
   // Calculate the vertical offset in normalized coordinates
   // The game board should start below the console bar
-  float console_height_ndc = (UIConfig::kConsoleBarHeight / display_h) * 2.0f;  // Convert to NDC (-1 to 1 range)
-  float board_vertical_size = 2.0f - console_height_ndc;  // Remaining vertical space for board
+  float console_height_ndc = (UIConfig::kConsoleBarHeight / display_h) *
+                             2.0f;  // Convert to NDC (-1 to 1 range)
+  float board_vertical_size =
+      2.0f - console_height_ndc;  // Remaining vertical space for board
 
   // Generate vertices for all cells
   std::vector<float> vertices;
@@ -160,8 +162,18 @@ void Renderer::render(const GameBoard& board) {
   unsigned int cols = board.get_columns();
 
   float cell_width = 2.0f / cols;  // Normalized device coordinates (-1 to 1)
-  float cell_height = board_vertical_size / rows;  // Use only the remaining vertical space
-  float padding = 0.02f;  // Small gap between cells
+  float cell_height =
+      board_vertical_size / rows;  // Use only the remaining vertical space
+
+  Difficulty difficulty = board.get_difficulty();
+  float padding;
+  if (difficulty == Difficulty::Easy) {
+    padding = 0.02f;  // Larger gap for easy mode
+  } else if (difficulty == Difficulty::Normal) {
+    padding = 0.01f;  // Medium gap for normal mode
+  } else {
+    padding = 0.005f;  // Smaller gap for hard mode
+  }
 
   for (unsigned int row = 0; row < rows; ++row) {
     for (unsigned int col = 0; col < cols; ++col) {
@@ -178,9 +190,9 @@ void Renderer::render(const GameBoard& board) {
       float x2 = x1 + cell_width - 2 * padding;
       float y2 = y1 - cell_height + 2 * padding;
 
-      // We don't use Triangle Strips for simplicity
+      // Two triangles to make a rectangle. We don't use Triangle Strips because
+      // the total number of vertices is not so large
       //
-      // Two triangles to make a rectangle
       // Triangle 1: Top-left -> Top-right -> Bottom-left
       vertices.push_back(x1);
       vertices.push_back(y1);  // Top-left

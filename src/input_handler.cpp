@@ -110,4 +110,15 @@ void InputHandler::handle_key(int key, int scancode, int action, int mods) {
     board_->reset();
     std::cout << "Game restarted! Press 'R' to restart again." << std::endl;
   }
+  // Press '1', '2', '3' to change difficulty
+  else if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+    board_->change_difficulty(Difficulty::Easy);
+    std::cout << "Difficulty changed to Easy (9x9, 10 bombs)" << std::endl;
+  } else if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
+    board_->change_difficulty(Difficulty::Normal);
+    std::cout << "Difficulty changed to Normal (16x16, 25 bombs)" << std::endl;
+  } else if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
+    board_->change_difficulty(Difficulty::Hard);
+    std::cout << "Difficulty changed to Hard (25x25, 60 bombs)" << std::endl;
+  }
 }

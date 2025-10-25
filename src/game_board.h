@@ -11,7 +11,7 @@ enum class GameState { Playing, GameOver, Cleared };
 class GameBoard {
  public:
   // Constructor
-  GameBoard(Difficulty difficulty);
+  GameBoard();
 
   // Get the current game state
   GameState get_game_state() const;
@@ -26,12 +26,16 @@ class GameBoard {
   // Reset the game (restart)
   void reset();
 
+  // Change difficulty and reset the game
+  void change_difficulty(Difficulty difficulty);
+
   // Getters for rendering
   unsigned int get_rows() const { return settings_.rows; }
   unsigned int get_columns() const { return settings_.columns; }
   const Cell& get_cell(unsigned int row, unsigned int col) const {
     return cells_[row * settings_.columns + col];
   }
+  Difficulty get_difficulty() const { return settings_.difficulty; }
 
  private:
   GameState game_state_;

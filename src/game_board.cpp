@@ -2,9 +2,9 @@
 
 #include <random>
 
-GameBoard::GameBoard(const Difficulty difficulty) {
+GameBoard::GameBoard() {
   game_state_ = GameState::Playing;
-  settings_ = get_settings(difficulty);
+  settings_ = GameSettings::from_difficulty(Difficulty::Normal);
 
   // Initialize cells with default constructor
   cells_.resize(settings_.rows * settings_.columns);
@@ -164,4 +164,11 @@ void GameBoard::reset() {
 
   // Deploy new bombs and recalculate counts
   deploy_bombs_and_counts();
+}
+
+void GameBoard::change_difficulty(Difficulty difficulty) {
+  // Update difficulty and settings
+  settings_ = GameSettings::from_difficulty(difficulty);
+  // Reset the game with new settings
+  reset();
 }
