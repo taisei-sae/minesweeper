@@ -28,9 +28,16 @@ bool UIManager::initialize() {
   io.Fonts->AddFontDefault();
 
   // Load custom font with larger size for game overlay
-  // DejaVu Sans Bold is a high-quality font available on Ubuntu
+  // Platform-specific font paths
+#ifdef _WIN32
+  // Windows: Use Arial Bold (available on all Windows systems)
+  const char* font_path = "C:\\Windows\\Fonts\\arialbd.ttf";
+#else
+  // Linux: Use DejaVu Sans Bold
   const char* font_path =
       "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf";
+#endif
+
   large_font_ = io.Fonts->AddFontFromFileTTF(
       font_path, 48.0f);  // Load at 48pt for high quality
   io.Fonts->Build();

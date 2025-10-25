@@ -7,12 +7,29 @@ project(Minesweeper CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GLFW REQUIRED glfw3)
-pkg_check_modules(IMGUI REQUIRED imgui)
+# Windows-specific settings
+if(WIN32)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
+# Find packages - support both pkg-config (Linux) and find_package (Windows/vcpkg)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GTest CONFIG REQUIRED)
+
+# Try pkg-config first (Linux), fallback to find_package (Windows)
+find_package(PkgConfig)
+if(PKG_CONFIG_FOUND)
+  pkg_check_modules(GLFW REQUIRED glfw3)
+  pkg_check_modules(IMGUI REQUIRED imgui)
+else()
+  # Windows/vcpkg fallback
+  find_package(glfw3 CONFIG REQUIRED)
+  find_package(imgui CONFIG REQUIRED)
+  # Set variables to match pkg-config style for compatibility
+  set(GLFW_LIBRARIES glfw)
+  set(IMGUI_LIBRARIES imgui::imgui)
+endif()
 
 add_executable(Minesweeper
     src/main.cpp
