@@ -54,8 +54,6 @@ jobs:
 
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'  # Latest stable version
 
     - name: Install dependencies with vcpkg
       run: |
@@ -63,6 +61,8 @@ jobs:
         vcpkg install glew:x64-windows
         vcpkg install imgui[glfw-binding,opengl3-binding]:x64-windows
         vcpkg install gtest:x64-windows
+      env:
+        VCPKG_DISABLE_METRICS: 1
 
     - name: Configure CMake
       run: |
@@ -97,18 +97,16 @@ jobs:
 
     - name: Install dependencies
       run: |
-        brew install cmake glfw glew googletest
-        # ImGui needs to be installed manually or via vcpkg
-        brew install pkg-config
+        brew install cmake glfw glew googletest pkg-config
 
     - name: Setup vcpkg for ImGui
       uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
 
     - name: Install ImGui with vcpkg
       run: |
         vcpkg install imgui[glfw-binding,opengl3-binding]:x64-osx
+      env:
+        VCPKG_DISABLE_METRICS: 1
 
     - name: Configure CMake
       run: |

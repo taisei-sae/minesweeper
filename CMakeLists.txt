@@ -18,17 +18,18 @@ find_package(GLEW REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 # Try pkg-config first (Linux), fallback to find_package (Windows)
-find_package(PkgConfig)
-if(PKG_CONFIG_FOUND)
-  pkg_check_modules(GLFW REQUIRED glfw3)
-  pkg_check_modules(IMGUI REQUIRED imgui)
-else()
-  # Windows/vcpkg fallback
+if(WIN32)
+  # Windows: use find_package directly (vcpkg)
   find_package(glfw3 CONFIG REQUIRED)
   find_package(imgui CONFIG REQUIRED)
   # Set variables to match pkg-config style for compatibility
   set(GLFW_LIBRARIES glfw)
   set(IMGUI_LIBRARIES imgui::imgui)
+else()
+  # Linux: use pkg-config
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(GLFW REQUIRED glfw3)
+  pkg_check_modules(IMGUI REQUIRED imgui)
 endif()
 
 add_executable(Minesweeper

@@ -54,9 +54,13 @@ The build status badge is displayed in the main README.md:
 
 ## Troubleshooting
 
-### Windows build fails with vcpkg errors
-- The workflow uses a specific vcpkg commit ID for stability
-- If packages fail to install, the commit ID may need to be updated
+### Windows build fails with pkgconfig download errors (404)
+**Problem**: vcpkg tries to download pkgconfig from MSYS2 mirrors and gets 404 errors
+
+**Solution**: Updated CMakeLists.txt to skip pkg-config on Windows and use find_package directly
+- Windows uses vcpkg's CONFIG mode for package finding
+- Linux continues to use pkg-config as normal
+- This avoids the pkgconfig dependency issue on Windows
 
 ### Linux build fails with missing packages
 - Check that all package names are correct for Ubuntu's apt repository
@@ -64,7 +68,7 @@ The build status badge is displayed in the main README.md:
 
 ### macOS build fails
 - ImGui may not be available via Homebrew, so vcpkg is used
-- Ensure vcpkg commit ID is compatible with macOS
+- Uses latest vcpkg version (no specific commit ID needed)
 
 ## Local Testing
 
