@@ -89,7 +89,11 @@ bool GameBoard::open_cell(unsigned int row, unsigned int column) {
     open_cell_recursive(row, column);
   }
 
-  // TODO: Check if game is cleared (all non-bomb cells are open)
+  // Check if game is cleared (all non-bomb cells are open)
+  if (check_game_cleared()) {
+    game_state_ = GameState::Cleared;
+    return false;  // Game cleared!
+  }
 
   return true;  // Game continues
 }
@@ -137,4 +141,15 @@ void GameBoard::toggle_flag(unsigned int row, unsigned int column) {
 
   // Toggle the flag on the cell
   cell.toggle_flag();
+}
+
+bool GameBoard::check_game_cleared() {
+  for (const auto& cell : cells_) {
+    // If there's a non-bomb cell that is not open, game is not cleared
+    if (!cell.has_bomb() && !cell.is_open()) {
+      return false;
+    }
+  }
+  // All non-bomb cells are open
+  return true;
 }

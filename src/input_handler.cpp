@@ -53,7 +53,12 @@ void InputHandler::handle_mouse_button(int button, int action, int mods) {
     // Open the cell
     bool game_continues = board_->open_cell(row, col);
     if (!game_continues) {
-      std::cout << "Game Over! You hit a bomb!" << std::endl;
+      GameState state = board_->get_game_state();
+      if (state == GameState::Cleared) {
+        std::cout << "Congratulations! You cleared the game!" << std::endl;
+      } else if (state == GameState::GameOver) {
+        std::cout << "Game Over! You hit a bomb!" << std::endl;
+      }
     }
   } else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
     // Right-click handling (e.g., flagging a cell) can be added here

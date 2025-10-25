@@ -20,13 +20,12 @@ class GameBoard {
   // Returns true if the game should continue, false if game over
   bool open_cell(unsigned int row, unsigned int column);
 
+  // Right click to toggle flag on a cell at (row, column)
   void toggle_flag(unsigned int row, unsigned int column);
 
-  /// Getters for rendering
+  // Getters for rendering
   unsigned int get_rows() const { return settings_.rows; }
-
   unsigned int get_columns() const { return settings_.columns; }
-
   const Cell& get_cell(unsigned int row, unsigned int col) const {
     return cells_[row * settings_.columns + col];
   }
@@ -39,6 +38,7 @@ class GameBoard {
   bool is_valid_point(unsigned int row, unsigned int column);
   void deploy_bombs_and_counts();
   void open_cell_recursive(unsigned int row, unsigned int column);
+  bool check_game_cleared();
 };
 
 #endif  // GAME_BOARD_H_
