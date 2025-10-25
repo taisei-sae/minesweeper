@@ -11,6 +11,12 @@ A game, you know.
 ```bash
 sudo apt install -y build-essential cmake libglfw3-dev libglew-dev libgtest-dev
 ```
+### Build and Run
+At project root,
+```bash
+./build.sh # build
+./build/MineSweeper # Run
+```
 ### Coding Rules
 #### Style
 Basically ses *Google C++ Style Guide*
