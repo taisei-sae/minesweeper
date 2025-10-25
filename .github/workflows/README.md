@@ -21,15 +21,11 @@ The main build and test workflow that runs on every push and pull request.
    - Runs tests with CTest
    - Uploads Windows executable as artifact
 
-3. **build-macos** - macOS latest
-   - Installs dependencies via Homebrew and vcpkg
-   - Builds the project with CMake
-   - Runs tests with CTest
-   - Uploads macOS binary as artifact
-
-4. **build-summary**
+3. **build-summary**
    - Summarizes all build results
    - Fails if any platform build fails
+
+**Note**: macOS build is not currently included in CI. macOS support is untested.
 
 ### Triggers
 
@@ -42,7 +38,6 @@ The main build and test workflow that runs on every push and pull request.
 Build artifacts are retained for 7 days and can be downloaded from the Actions tab:
 - `minesweeper-linux` - Linux executable
 - `minesweeper-windows` - Windows executable (.exe)
-- `minesweeper-macos` - macOS executable
 
 ### Status Badge
 
@@ -66,10 +61,6 @@ The build status badge is displayed in the main README.md:
 - Check that all package names are correct for Ubuntu's apt repository
 - Package names may change between Ubuntu versions
 
-### macOS build fails
-- ImGui may not be available via Homebrew, so vcpkg is used
-- Uses latest vcpkg version (no specific commit ID needed)
-
 ## Local Testing
 
 You can test the workflow locally using [act](https://github.com/nektos/act):
@@ -85,7 +76,6 @@ act
 # Run specific job
 act -j build-linux
 act -j build-windows
-act -j build-macos
 ```
 
-Note: Windows and macOS jobs may not work properly with act due to platform limitations.
+Note: Windows jobs may not work properly with act due to platform limitations.
