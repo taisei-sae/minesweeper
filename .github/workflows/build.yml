@@ -52,25 +52,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup vcpkg
+    - name: Setup vcpkg and install dependencies
       uses: lukka/run-vcpkg@v11
       with:
-        vcpkgGitCommitId: '01f602195983451bc83e72f4214af2cbc495aa94'  # 2024 release
-
-    - name: Install dependencies with vcpkg
-      run: |
-        vcpkg install glfw3:x64-windows
-        vcpkg install glew:x64-windows
-        vcpkg install imgui[glfw-binding,opengl3-binding]:x64-windows
-        vcpkg install gtest:x64-windows
-      env:
-        VCPKG_DISABLE_METRICS: 1
+        doNotCache: false
 
     - name: Configure CMake
       run: |
         mkdir build
         cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
+      env:
+        VCPKG_DISABLE_METRICS: 1
 
     - name: Build
       run: |

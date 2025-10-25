@@ -48,21 +48,15 @@ sudo apt install -y build-essential cmake libglfw3-dev libglew-dev libimgui-dev 
 - **Option 2: MinGW-w64**
   - MinGW-w64 + CMake
 
-- **Package Manager: vcpkg** (Recommended for dependencies)
+- **Package Manager: vcpkg** (Required for dependencies)
 ```powershell
 # Install vcpkg
 git clone https://github.com/Microsoft/vcpkg.git
 cd vcpkg
 .\bootstrap-vcpkg.bat
-
-# Install dependencies
-.\vcpkg install glfw3:x64-windows glew:x64-windows
-.\vcpkg install imgui[glfw-binding,opengl3-binding]:x64-windows
-.\vcpkg install gtest:x64-windows
-
-# Integrate with CMake
-.\vcpkg integrate install
 ```
+
+Dependencies are managed via `vcpkg.json` manifest file and will be installed automatically during CMake configuration.
 
 See [WINDOWS_BUILD.md](WINDOWS_BUILD.md) for detailed Windows build instructions.
 
