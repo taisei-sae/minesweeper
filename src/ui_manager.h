@@ -22,6 +22,10 @@ class UIManager {
  private:
   GLFWwindow* window_;
   bool initialized_;
+
+  // Render numbers and symbols overlay on game board
+  void render_game_overlay(const GameBoard& board, int display_w,
+                           int display_h);
 };
 
 #endif  // UI_MANAGER_H_

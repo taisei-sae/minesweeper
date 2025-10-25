@@ -4,6 +4,8 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/imgui.h>
 
+#include <cstdio>
+
 #include "game_settings.h"
 
 UIManager::UIManager(GLFWwindow* window)
@@ -83,9 +85,93 @@ void UIManager::render(const GameBoard& board) {
 
   ImGui::End();
 
+  // Overlay numbers and symbols on game board cells
+  render_game_overlay(board, display_w, display_h);
+
   // Rendering
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void UIManager::render_game_overlay(const GameBoard& board, int display_w,
+                                    int display_h) {
+  // Create an invisible overlay window that covers the game board area
+  ImGui::SetNextWindowPos(ImVec2(0, UIConfig::kConsoleBarHeight));
+  ImGui::SetNextWindowSize(
+      ImVec2((float)display_w, display_h - UIConfig::kConsoleBarHeight));
+  ImGui::Begin("GameOverlay", nullptr,
+               ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+                   ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+                   ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoInputs);
+
+  unsigned int rows = board.get_rows();
+  unsigned int cols = board.get_columns();
+
+  float board_height = display_h - UIConfig::kConsoleBarHeight;
+  float cell_width = (float)display_w / cols;
+  float cell_height = board_height / rows;
+
+  ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+  for (unsigned int row = 0; row < rows; ++row) {
+    for (unsigned int col = 0; col < cols; ++col) {
+      const Cell& cell = board.get_cell(row, col);
+
+      // Only draw on opened cells
+      if (!cell.is_open()) {
+        continue;
+      }
+
+      float x = col * cell_width + cell_width / 2.0f;
+      float y =
+          UIConfig::kConsoleBarHeight + row * cell_height + cell_height / 2.0f;
+
+      if (cell.has_bomb()) {
+        // Draw bomb symbol
+        draw_list->AddText(ImVec2(x - 10, y - 10), IM_COL32(255, 0, 0, 255),
+                           "B");
+      } else if (cell.get_bomb_count() > 0) {
+        // Draw number
+        char num_str[2];
+        snprintf(num_str, sizeof(num_str), "%d", cell.get_bomb_count());
+
+        // Color based on count
+        ImU32 color;
+        switch (cell.get_bomb_count()) {
+          case 1:
+            color = IM_COL32(0, 0, 255, 255);  // Blue
+            break;
+          case 2:
+            color = IM_COL32(0, 128, 0, 255);  // Green
+            break;
+          case 3:
+            color = IM_COL32(255, 0, 0, 255);  // Red
+            break;
+          case 4:
+            color = IM_COL32(0, 0, 128, 255);  // Dark blue
+            break;
+          case 5:
+            color = IM_COL32(128, 0, 0, 255);  // Dark red
+            break;
+          case 6:
+            color = IM_COL32(0, 128, 128, 255);  // Cyan
+            break;
+          case 7:
+            color = IM_COL32(0, 0, 0, 255);  // Black
+            break;
+          case 8:
+            color = IM_COL32(128, 128, 128, 255);  // Gray
+            break;
+          default:
+            color = IM_COL32(0, 0, 0, 255);
+        }
+
+        draw_list->AddText(ImVec2(x - 5, y - 10), color, num_str);
+      }
+    }
+  }
+
+  ImGui::End();
 }
 
 void UIManager::cleanup() {
