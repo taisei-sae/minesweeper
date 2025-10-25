@@ -1,14 +1,21 @@
 #include "ui_manager.h"
 
-#include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/imgui.h>
 
-UIManager::UIManager(GLFWwindow* window) : window_(window) {}
+#include "game_settings.h"
+
+UIManager::UIManager(GLFWwindow* window)
+    : window_(window), initialized_(false) {}
 
 UIManager::~UIManager() { cleanup(); }
 
 bool UIManager::initialize() {
+  if (initialized_) {
+    return true;  // Already initialized
+  }
+
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -22,6 +29,7 @@ bool UIManager::initialize() {
   ImGui_ImplGlfw_InitForOpenGL(window_, true);
   ImGui_ImplOpenGL3_Init("#version 330");
 
+  initialized_ = true;
   return true;
 }
 
@@ -36,9 +44,9 @@ void UIManager::render(const GameBoard& board) {
   glfwGetFramebufferSize(window_, &display_w, &display_h);
 
   // Create console bar at the top (full width, fixed height)
-  const float console_height = 60.0f;
   ImGui::SetNextWindowPos(ImVec2(0, 0));
-  ImGui::SetNextWindowSize(ImVec2((float)display_w, console_height));
+  ImGui::SetNextWindowSize(
+      ImVec2((float)display_w, UIConfig::kConsoleBarHeight));
   ImGui::Begin("Console", nullptr,
                ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
@@ -67,7 +75,13 @@ void UIManager::render(const GameBoard& board) {
 }
 
 void UIManager::cleanup() {
+  if (!initialized_) {
+    return;  // Already cleaned up or never initialized
+  }
+
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
+
+  initialized_ = false;
 }

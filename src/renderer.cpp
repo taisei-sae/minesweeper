@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#include "game_settings.h"
+
 // Vertex shader source code
 const char* vertexShaderSource = R"(
 #version 330 core
@@ -146,11 +148,10 @@ void Renderer::render(const GameBoard& board) {
   // Get window dimensions to calculate console bar offset
   int display_w, display_h;
   glfwGetFramebufferSize(window_, &display_w, &display_h);
-  const float console_height = 60.0f;  // Same as UIManager console bar height
 
   // Calculate the vertical offset in normalized coordinates
   // The game board should start below the console bar
-  float console_height_ndc = (console_height / display_h) * 2.0f;  // Convert to NDC (-1 to 1 range)
+  float console_height_ndc = (UIConfig::kConsoleBarHeight / display_h) * 2.0f;  // Convert to NDC (-1 to 1 range)
   float board_vertical_size = 2.0f - console_height_ndc;  // Remaining vertical space for board
 
   // Generate vertices for all cells

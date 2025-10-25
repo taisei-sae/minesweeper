@@ -22,4 +22,10 @@ static GameSettings get_settings(Difficulty difficulty) {
   }
 }
 
+// UI configuration constants
+namespace UIConfig {
+constexpr float kConsoleBarHeight =
+    60.0f;  // Height of the console bar in pixels
+}  // namespace UIConfig
+
 #endif  // GAME_SETTINGS_H_

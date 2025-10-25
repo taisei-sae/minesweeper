@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "game_settings.h"
+
 InputHandler::InputHandler(GLFWwindow* window, GameBoard* board)
     : window_(window), board_(board) {}
 
@@ -49,11 +51,9 @@ std::tuple<unsigned int, unsigned int> InputHandler::get_clicked_cell() {
   unsigned int rows = board_->get_rows();
   unsigned int cols = board_->get_columns();
 
-  // Account for console bar at the top (60px height)
-  const float console_height = 60.0f;
-
+  // Account for console bar at the top
   // Subtract console bar height from y position
-  double adjusted_ypos = ypos - console_height;
+  double adjusted_ypos = ypos - UIConfig::kConsoleBarHeight;
 
   // If click is in the console bar area, return invalid coordinates
   if (adjusted_ypos < 0) {
@@ -61,7 +61,7 @@ std::tuple<unsigned int, unsigned int> InputHandler::get_clicked_cell() {
   }
 
   // Calculate available height for game board
-  double board_height = height - console_height;
+  double board_height = height - UIConfig::kConsoleBarHeight;
 
   unsigned int col = static_cast<unsigned int>((xpos / width) * cols);
   unsigned int row = static_cast<unsigned int>((adjusted_ypos / board_height) * rows);

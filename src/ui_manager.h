@@ -21,6 +21,7 @@ class UIManager {
 
  private:
   GLFWwindow* window_;
+  bool initialized_;
 };
 
 #endif  // UI_MANAGER_H_
