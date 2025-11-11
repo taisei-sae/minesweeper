@@ -1,3 +1,5 @@
+This document was generated using claude code
+
 # Third-Party Licenses
 
 This project uses the following open-source libraries. We are grateful to the developers and contributors of these projects.
